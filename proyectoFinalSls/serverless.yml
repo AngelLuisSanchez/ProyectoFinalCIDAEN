@@ -13,7 +13,7 @@ provider:
   region: eu-west-1
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangel.com
+    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangelalberto.com
     DYNAMODB_TABLE: ProyectoFinalCelebrities-${self:provider.stage}
 
   iamRoleStatements:
@@ -22,23 +22,12 @@ provider:
       Action: 
         - 'rekognition:*'
       Resource: "*"
-    # Estas dan Access denied 
-    # - Effect: Allow
-    #   Action:
-    #     - rekognition:RecognizeCelebrities
-    #   Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
-    # - Effect: Allow
-    #   Action:
-    #     - rekognition:*
-    #   Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
-    # - Effect: Allow
-    #   Action:
-    #     - rekognition:*
-    #   Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}
+
     - Effect: Allow
       Action:
         - s3:*
       Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
+
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -57,8 +46,8 @@ functions:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
-            - prefix: celebrities/
-  #Para pedir una en concreto (por id mejor que por nombre)
+            - prefix: input_images/
+
   s3-url:
     handler: handlers/handler.s3_url
     events:
