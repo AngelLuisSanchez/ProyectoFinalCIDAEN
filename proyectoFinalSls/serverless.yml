@@ -14,7 +14,7 @@ provider:
 
   environment:
     S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangelalberto.com
-    DYNAMODB_TABLE: ProyectoFinalCelebrities-${self:provider.stage}
+    DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
 
   iamRoleStatements:
     #Ajustar un poco, pero funciona
@@ -70,12 +70,20 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: id
+            AttributeName: daymonthYear
             AttributeType: S
+          -
+            AttributeName: periodico
+            AttributeType: S
+
         KeySchema:
           -
-            AttributeName: id
+            AttributeName: daymonthYear
             KeyType: HASH
+          -
+            AttributeName: periodico
+            KeyType: RANGE
+
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
