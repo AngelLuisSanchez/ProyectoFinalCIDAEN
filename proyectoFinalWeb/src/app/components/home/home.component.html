@@ -1,0 +1,26 @@
+<p>
+    home works!
+</p>
+
+<br><br>
+
+<table class="table miTabla">
+    <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+            <th>IdImage</th>
+            <th>Name</th>
+            <th>Url</th>
+            <th>IdCelebrity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let celebrity of celebrities; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{celebrity.idImage}}</td>
+            <td>{{celebrity.name}}</td>
+            <td>{{celebrity.url}}</td>
+            <td>{{celebrity.idCelebrity}}</td>
+        </tr>
+    </tbody>
+</table>
