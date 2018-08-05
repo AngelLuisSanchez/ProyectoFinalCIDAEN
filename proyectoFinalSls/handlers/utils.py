@@ -64,7 +64,7 @@ def parsear_datos_object_escenes(labels_object):
 def parsear_datos_celebreties(labels_celebrities):
     datos = []
     for label in labels_celebrities:
-        url = ''
+        url = 'Nulo'
         if('Urls' in label and len(label['Urls']) != 0):
             url = label['Urls'][0]
         datos.append(
