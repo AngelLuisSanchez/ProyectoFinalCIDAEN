@@ -23,8 +23,8 @@ def create_item(labels_object, labels_celebrities, periodico, idimagen):
     
     item = {
         'daymonthYear': utils.obtener_fecha_actual(),
+        'idimagen': periodico + '/' + idimagen,
         'periodico': periodico,
-        'idimagen': idimagen,
         'Labels': utils.parsear_datos_object_escenes(labels_object),
         'CelebrityFaces': utils.parsear_datos_celebreties(labels_celebrities)
         }

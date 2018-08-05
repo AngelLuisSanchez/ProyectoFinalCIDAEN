@@ -1,8 +1,11 @@
 import uuid
+import os
 
 from handlers import utils
 from handlers import utils_dynamodb
 from handlers import utils_rekognition
+from handlers import utils_crawler
+from handlers import utils_s3
 
 def image_uploaded(event, context):
 
@@ -33,6 +36,14 @@ def image_uploaded(event, context):
     
     #Guardamos los resultados en dynamo
     utils_dynamodb.create_item(labels_object, labels_celebrities, folder, fileName)
+
+
+
+def descargar_imagenes_elpais(event, context):
+    utils_crawler.images_el_pais()
+    os.listdir('/tmp/')
+    utils_s3.move_to_s3_folder('elpais')
+
     
 
 
