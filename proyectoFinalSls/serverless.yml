@@ -1,0 +1,114 @@
+service: cidaen-proyectofinal-back 
+
+plugins:
+  - serverless-ephemeral
+
+package:
+  exclude:
+    - ./**
+  include:
+    - handlers/**
+
+custom:
+  ephemeral:
+    libraries:
+    - packager:
+        compose: tf-packager/docker-compose.yml
+        service: packager
+        output: /tmp/lambda_package.zip
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: eu-west-1
+  memorySize: 3008
+  timeout: 300
+
+  environment:
+    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangel2.com
+    DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
+
+  iamRoleStatements:
+    #Ajustar un poco, pero funciona
+    - Effect: 'Allow'
+      Action: 
+        - 'rekognition:*'
+      Resource: "*"
+
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
+
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+
+  download-images-elpais:
+    handler: handlers/handler.descargar_imagenes_elpais
+    events:
+      - schedule: cron(49 17 * * ? *)
+
+  s3-new-image:
+    handler: handlers/handler.image_uploaded
+    events:
+      - s3:
+          bucket: ${self:provider.environment.S3_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: input_images/
+      - s3:
+          bucket: ${self:provider.environment.S3_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: elpais/
+
+  s3-url:
+    handler: handlers/handler.s3_url
+    events:
+      - http:
+          path: celebrity/{id_celebrity}
+          method: get
+  
+  dynamodb-celebrities:
+    handler: handlers/handler.dynamodb_celebrities
+    events:
+      - http:
+          path: celebrities
+          method: get
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: daymonthYear
+            AttributeType: S
+          -
+            AttributeName: idimagen
+            AttributeType: S
+
+        KeySchema:
+          -
+            AttributeName: daymonthYear
+            KeyType: HASH
+          -
+            AttributeName: idimagen
+            KeyType: RANGE
+
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
