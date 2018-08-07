@@ -58,6 +58,11 @@ functions:
     events:
       - schedule: cron(49 17 * * ? *)
 
+  download-images-elmundo:
+    handler: handlers/handler.descargar_imagenes_elmundo
+    events:
+      - schedule: cron(35 18 * * ? *)
+
   s3-new-image:
     handler: handlers/handler.image_uploaded
     events:
@@ -65,26 +70,13 @@ functions:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
-            - prefix: input_images/
+            - prefix: elpais/
       - s3:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
-            - prefix: elpais/
+            - prefix: elmundo/
 
-  s3-url:
-    handler: handlers/handler.s3_url
-    events:
-      - http:
-          path: celebrity/{id_celebrity}
-          method: get
-  
-  dynamodb-celebrities:
-    handler: handlers/handler.dynamodb_celebrities
-    events:
-      - http:
-          path: celebrities
-          method: get
 
 resources:
   Resources:

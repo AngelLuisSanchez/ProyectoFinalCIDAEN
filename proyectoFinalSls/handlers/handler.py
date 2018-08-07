@@ -44,12 +44,10 @@ def descargar_imagenes_elpais(event, context):
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('elpais')
 
+def descargar_imagenes_elmundo(event, context):
+    utils_crawler.images_el_mundo()
+    os.listdir('/tmp/')
+    utils_s3.move_to_s3_folder('elmundo')
+
     
 
-
-def dynamodb_celebrities(event, context):
-    celebrities = utils_dynamodb.getCelebrities()
-
-    print(celebrities)
-
-    return utils.jsonify(celebrities)
