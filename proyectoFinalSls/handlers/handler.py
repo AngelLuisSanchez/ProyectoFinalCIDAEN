@@ -40,14 +40,19 @@ def image_uploaded(event, context):
 
 
 def descargar_imagenes_elpais(event, context):
-    utils_crawler.images_el_pais()
+    utils_crawler.descargar_imagenes_portadas_periodicos('elpais', 'https://elpais.com/')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('elpais')
 
 def descargar_imagenes_elmundo(event, context):
-    utils_crawler.images_el_mundo()
+    utils_crawler.descargar_imagenes_portadas_periodicos('elmundo', 'http://www.elmundo.es/')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('elmundo')
+
+def descargar_imagenes_abc(event, context):
+    utils_crawler.descargar_imagenes_portadas_periodicos('abc', 'https://www.abc.es/')
+    os.listdir('/tmp/')
+    utils_s3.move_to_s3_folder('abc')
 
     
 

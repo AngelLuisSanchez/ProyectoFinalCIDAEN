@@ -56,12 +56,17 @@ functions:
   download-images-elpais:
     handler: handlers/handler.descargar_imagenes_elpais
     events:
-      - schedule: cron(49 17 * * ? *)
+      - schedule: cron(47 16 * * ? *)
 
   download-images-elmundo:
     handler: handlers/handler.descargar_imagenes_elmundo
     events:
-      - schedule: cron(35 18 * * ? *)
+      - schedule: cron(50 16 * * ? *)
+
+  download-images-abc:
+    handler: handlers/handler.descargar_imagenes_abc
+    events:
+      - schedule: cron(53 16 * * ? *)
 
   s3-new-image:
     handler: handlers/handler.image_uploaded
@@ -76,6 +81,11 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - prefix: elmundo/
+      - s3:
+          bucket: ${self:provider.environment.S3_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: abc/
 
 
 resources:
