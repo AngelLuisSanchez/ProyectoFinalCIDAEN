@@ -25,7 +25,13 @@ def descargar_imagenes_portadas_periodicos(periodico, url_periodico):
             url = img.get_attribute_list('src')[0]
             if(url != None and 'e00-elmundo.uecdn.es' in url):
                 rutas.append(url)
-
+        elif(periodico == 'diarioes'):
+            url = img.get_attribute_list('src')[0]
+            if(url != None and 'jpg' in url):
+                rutas.append(url_periodico + url)
+        else:
+            print('Periodico no encontrado')
+    
     try:
         shutil.rmtree('/tmp/' + periodico, ignore_errors=True)
     except:

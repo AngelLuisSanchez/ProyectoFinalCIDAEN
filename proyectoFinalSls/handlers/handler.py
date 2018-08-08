@@ -54,5 +54,10 @@ def descargar_imagenes_abc(event, context):
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('abc')
 
+def descargar_imagenes_diarioes(event, context):
+    utils_crawler.descargar_imagenes_portadas_periodicos('diarioes', 'https://www.eldiario.es')
+    os.listdir('/tmp/')
+    utils_s3.move_to_s3_folder('diarioes')
+
     
 
