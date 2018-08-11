@@ -52,6 +52,14 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
+  
+  obtener-nube-de-palabras:
+    handler: handlers/handler.obtener_nube_de_palabras
+    events:
+      - http:
+          path: cloudtags
+          method: get
+          cors: true
 
   download-images-elpais:
     handler: handlers/handler.descargar_imagenes_elpais

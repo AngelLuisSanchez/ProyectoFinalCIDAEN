@@ -59,5 +59,13 @@ def descargar_imagenes_diarioes(event, context):
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('diarioes')
 
+def obtener_nube_de_palabras(event, context):
+    periodicos = ['elpais', 'diarioes', 'elmundo', 'abc']
+    nube = []
+    for p in periodicos:
+        nube.append({
+            p: utils_dynamodb.obtener_nube_palabras_periodico(p)
+            })
+    return utils.jsonify({'datos': nube})
     
 

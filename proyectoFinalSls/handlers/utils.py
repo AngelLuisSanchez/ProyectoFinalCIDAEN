@@ -1,6 +1,7 @@
 import json
 import datetime
 import decimal
+import random
 
 
 def jsonify(obj):
@@ -75,3 +76,25 @@ def parsear_datos_celebreties(labels_celebrities):
             }
         )
     return datos
+
+
+#Funcion para parsear las palabras de la nube
+def parsear_datos_consulta(datos):
+    d = []
+    l1 = []
+    for r in datos:
+        if(len(r['Labels']) != 0):
+            for l in r['Labels']:
+                if l['Name'] not in l1:
+                    l1.append(l['Name'])
+                    d.append({
+                        'text': l['Name'],
+                        'weight' : float(l['Confidence']),
+                        'color' : generar_color_aleatorio()
+                        })
+    return d
+
+#Funcion para generar un color de forma aleatoria
+def generar_color_aleatorio():
+    r = lambda: random.randint(0,255)
+    return '#%02X%02X%02X' % (r(),r(),r())
