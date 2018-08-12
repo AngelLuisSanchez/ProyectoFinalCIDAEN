@@ -8,7 +8,7 @@ import { Observable } from '../../../node_modules/rxjs';
 
 export class ApiServiceService {
 
-  endpointangel = 'https://2j7xoa1ww9.execute-api.eu-west-1.amazonaws.com/dev/';
+  endpointangel = 'XXXXXXXX';
   endpointalberto = 'XXXXXXXX';
 
   constructor(private http: Http) { }
