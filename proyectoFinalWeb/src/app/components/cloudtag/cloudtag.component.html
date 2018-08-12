@@ -12,7 +12,7 @@
         la prensa deportiva.
     </div>
     <div class="col-sm-8">
-        <angular-tag-cloud [data]="elpais" [width]="800" [height]="350">
+        <angular-tag-cloud [data]="elpais" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
         </angular-tag-cloud>
     </div>
 </div>
@@ -26,7 +26,7 @@
         de la edición general impresa de ámbito nacional (ISSN 1697-0179), ha contado y cuenta con distintas ediciones regionales y locales
     </div>
     <div class="col-sm-8">
-        <angular-tag-cloud [data]="elmundo" [width]="800" [height]="350">
+        <angular-tag-cloud [data]="elmundo" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
         </angular-tag-cloud>
     </div>
 </div>
@@ -38,7 +38,7 @@
         que formaban parte del mismo hasta el cierre de su edición en papel. Está editado por la sociedad limitada: Diario de Prensa Digital S.L
     </div>
     <div class="col-sm-8">
-        <angular-tag-cloud [data]="diarioes" [width]="800" [height]="350">
+        <angular-tag-cloud [data]="diarioes" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
         </angular-tag-cloud>
     </div>
 </div>
@@ -50,7 +50,7 @@
         un artículo de opinión de la tercera página, denominado genéricamente «La Tercera». ABC cuenta con once ediciones en España, entre las que destacan especialmente (por antigüedad y presencia) las de Madrid y Sevilla.
     </div>
     <div class="col-sm-8">
-        <angular-tag-cloud [data]="abc" [width]="800" [height]="350">
+        <angular-tag-cloud [data]="abc" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
         </angular-tag-cloud>
     </div>
 </div>

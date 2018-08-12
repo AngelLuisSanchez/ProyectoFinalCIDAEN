@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
-import { CloudData, CloudOptions, TagCloudComponent } from 'angular-tag-cloud-module';
+import { CloudData, CloudOptions, TagCloudComponent, ZoomOnHoverOptions } from 'angular-tag-cloud-module';
 import { ApiServiceService } from '../../services/api-service.service';
 
 @Component({
@@ -8,29 +8,30 @@ import { ApiServiceService } from '../../services/api-service.service';
   styleUrls: ['./cloudtag.component.css']
 })
 
+export class CloudtagComponent implements OnInit {
+  @ViewChild(TagCloudComponent) tagCloudComponent: TagCloudComponent;
 
+  options: CloudOptions = {
+    width : 800,
+    height : 300,
+    overflow: false
+  };
 
-export class CloudtagComponent {
-
-@ViewChild(TagCloudComponent) tagCloudComponent: TagCloudComponent;
-
-options: CloudOptions = {
-  width : 0.8,
-  height : 400,
-  overflow: false,
-  zoomOnHover: {
+  zoomOnHoverOptions: ZoomOnHoverOptions = {
     scale: 1.3,
-    transitionTime: 1.2
-  }
-};
+    transitionTime: 1.2,
+    delay: 0.8
+  };
 
-elpais: CloudData[];
-elmundo: CloudData[];
-abc: CloudData[];
-diarioes: CloudData[];
+  elpais: CloudData[];
+  elmundo: CloudData[];
+  abc: CloudData[];
+  diarioes: CloudData[];
 
-  constructor(private apiService: ApiServiceService) {
-    this.apiService.getCloudTagss().subscribe(
+  constructor(private _apiService: ApiServiceService) { }
+
+  ngOnInit(): void {
+    this._apiService.getCloudTagss().subscribe(
       resp => {
         resp = resp.json()['datos'];
         this.elpais = resp[0]['elpais'];
@@ -43,7 +44,6 @@ diarioes: CloudData[];
       },
     );
   }
-
 
   log(eventType: string, e?: CloudData) {
     console.log(eventType, e);

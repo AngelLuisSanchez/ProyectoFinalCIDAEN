@@ -6,39 +6,35 @@ import uuid
 import os
 import shutil
 
- 
-
-#Funcion unificada para los 4 periodicos
-def descargar_imagenes_portadas_periodicos(periodico, url_periodico):
-    
-    page = requests.get(url_periodico)
+def download_images_covers_newspaper(newspaper, url_newspaper):    
+    page = requests.get(url_newspaper)
     soup = BeautifulSoup(page.content, 'lxml')
     
     imgs = soup.find_all('img')
-    rutas = []
+    routes = []
     for img in imgs:
-        if(periodico == 'elpais' or periodico == 'abc'):
+        if(newspaper == 'elpais' or newspaper == 'abc'):
             url = img.get_attribute_list('data-src')[0]
             if(url != None):
-                rutas.append('https:'+str(url))
-        elif(periodico == 'elmundo'):
+                routes.append('https:'+str(url))
+        elif(newspaper == 'elmundo'):
             url = img.get_attribute_list('src')[0]
             if(url != None and 'e00-elmundo.uecdn.es' in url):
-                rutas.append(url)
-        elif(periodico == 'diarioes'):
+                routes.append(url)
+        elif(newspaper == 'diarioes'):
             url = img.get_attribute_list('src')[0]
             if(url != None and 'jpg' in url):
-                rutas.append(url_periodico + url)
+                routes.append(url_newspaper + url)
         else:
-            print('Periodico no encontrado')
+            print('newspaper not found', newspaper)
     
     try:
-        shutil.rmtree('/tmp/' + periodico, ignore_errors=True)
+        shutil.rmtree('/tmp/' + newspaper, ignore_errors=True)
     except:
-        print('Error al borrar el directorio ' + periodico)
+        print('Error delete directory', newspaper)
         
-    os.mkdir('/tmp/' + periodico)
+    os.mkdir('/tmp/' + newspaper)
     
     for i in range(5):
-        extension = rutas[i].split('/')[-1].split('.')[-1]
-        urllib.request.urlretrieve(rutas[i], '/tmp/'+ periodico + '/' + str(uuid.uuid4()) + '.' + extension)
+        extension = routes[i].split('/')[-1].split('.')[-1]
+        urllib.request.urlretrieve(routes[i], '/tmp/'+ newspaper + '/' + str(uuid.uuid4()) + '.' + extension)
