@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Url</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let celebrity of celebrities; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{celebrity.Name}}</td>
+                        <td>{{celebrity.Url == 'Nulo' ? '-' : celebrity.Url}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <h5>(TODO) Grafica linear personaje/dia</h5>
+    </div>
+    <div class="row">
+        <h5>(TODO) Grafica linear periodico/personaje</h5>
+    </div>
+</div>

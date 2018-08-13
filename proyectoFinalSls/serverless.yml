@@ -26,11 +26,10 @@ provider:
   timeout: 300
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangel2.com
+    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.angelalberto3.com
     DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
 
   iamRoleStatements:
-    #Ajustar un poco, pero funciona
     - Effect: 'Allow'
       Action: 
         - 'rekognition:*'
@@ -53,23 +52,38 @@ provider:
 
 functions:
 
+  cloud-tags:
+    handler: handlers/handler.get_cloud_tags
+    events:
+      - http:
+          path: cloudtags
+          method: get
+          cors: true
+  
+  list-celebrities:
+    handler: handlers/handler.list_celebrities
+    events:
+      - http:
+          path: celebrities
+          method: get
+
   download-images-elpais:
-    handler: handlers/handler.descargar_imagenes_elpais
+    handler: handlers/handler.download_images_elpais
     events:
       - schedule: cron(00 06 * * ? *)
 
   download-images-elmundo:
-    handler: handlers/handler.descargar_imagenes_elmundo
+    handler: handlers/handler.download_images_elmundo
     events:
       - schedule: cron(05 06 * * ? *)
 
   download-images-abc:
-    handler: handlers/handler.descargar_imagenes_abc
+    handler: handlers/handler.download_images_abc
     events:
       - schedule: cron(10 06 * * ? *)
 
   download-images-diarioes:
-    handler: handlers/handler.descargar_imagenes_diarioes
+    handler: handlers/handler.download_images_diarioes
     events:
       - schedule: cron(15 06 * * ? *)
 
@@ -96,7 +110,6 @@ functions:
           event: s3:ObjectCreated:*
           rules:
             - prefix: diarioes/
-
 
 resources:
   Resources:

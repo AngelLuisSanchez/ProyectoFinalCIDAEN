@@ -8,56 +8,63 @@ from handlers import utils_crawler
 from handlers import utils_s3
 
 def image_uploaded(event, context):
-
     file_obj = event['Records'][0]
     filePath = str(file_obj['s3']['object']['key'])
     folder = filePath.split('/')[0]
     fileName = filePath.split('/')[1]
     bucketName = file_obj['s3']['bucket']['name']
     
-
-    #Llamamos a la api que reconoce objetos y escenas
+    #Call API Rekognition to recognize objects and scenes
     response = utils_rekognition.recognize_object_and_scenes(bucketName, filePath)
 
-    #Vemos si hay resultados
-    labels_object = utils.parsear_resultado_object_and_scenes(response, 'Labels')
+    #Get results objects and scenes
+    labels_object = utils.parse_results_objects_and_scenes(response, 'Labels')
 
-    #Comprobamos si hay labels y si existen personas en ellas
+    #Check labels for people
     size = len(labels_object) != 0
-    personas = utils.comprobar_si_hay_persona(labels_object)
+    personas = utils.check_for_people(labels_object)
     labels_celebrities = {}
     if(size and personas):
-        #LLamamos a la api de celebridades
+        #Call API Rekognition to recognize celebrities
         response = utils_rekognition.recognize_celebrities(bucketName, filePath)
-        labels_celebrities = utils.parsear_resultado_object_and_scenes(response, 'CelebrityFaces')
+        labels_celebrities = utils.parse_results_objects_and_scenes(response, 'CelebrityFaces')
     
     print(labels_object)
     print(labels_celebrities)
     
-    #Guardamos los resultados en dynamo
+    #Save results into dynamo
     utils_dynamodb.create_item(labels_object, labels_celebrities, folder, fileName)
 
-
-
-def descargar_imagenes_elpais(event, context):
-    utils_crawler.descargar_imagenes_portadas_periodicos('elpais', 'https://elpais.com/')
+def download_images_elpais(event, context):
+    utils_crawler.download_images_covers_newspaper('elpais', 'https://elpais.com/')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('elpais')
 
-def descargar_imagenes_elmundo(event, context):
-    utils_crawler.descargar_imagenes_portadas_periodicos('elmundo', 'http://www.elmundo.es/')
+def download_images_elmundo(event, context):
+    utils_crawler.download_images_covers_newspaper('elmundo', 'http://www.elmundo.es/')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('elmundo')
 
-def descargar_imagenes_abc(event, context):
-    utils_crawler.descargar_imagenes_portadas_periodicos('abc', 'https://www.abc.es/')
+def download_images_abc(event, context):
+    utils_crawler.download_images_covers_newspaper('abc', 'https://www.abc.es/')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('abc')
 
-def descargar_imagenes_diarioes(event, context):
-    utils_crawler.descargar_imagenes_portadas_periodicos('diarioes', 'https://www.eldiario.es')
+def download_images_diarioes(event, context):
+    utils_crawler.download_images_covers_newspaper('diarioes', 'https://www.eldiario.es')
     os.listdir('/tmp/')
     utils_s3.move_to_s3_folder('diarioes')
 
-    
+def get_cloud_tags(event, context):
+    newspapers = ['elpais', 'diarioes', 'elmundo', 'abc']
+    cloudTags = []
+    for p in newspapers:
+        cloudTags.append({
+            p: utils_dynamodb.get_cloud_tags_newspaper(p)
+        })
+    return utils.jsonify({'datos': cloudTags})
 
+def list_celebrities(event, context):
+    celebrities = utils_dynamodb.getCelebrities()
+
+    return utils.jsonify({'datos': celebrities})

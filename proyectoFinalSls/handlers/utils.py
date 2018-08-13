@@ -1,8 +1,9 @@
 import json
 import datetime
 import decimal
+import random
 
-
+#Return json data
 def jsonify(obj):
     return {
         'headers': {
@@ -13,10 +14,8 @@ def jsonify(obj):
         'body': json.dumps(obj)
     }
 
-
-#Funcion para saber si es necesario llamar a la api de celebridades
-def comprobar_si_hay_persona(labels):
-
+#Check if image contains people
+def check_for_people(labels):
     names = ['Human', 'People', 'Person', 'Face']
 
     for label in labels:
@@ -25,10 +24,8 @@ def comprobar_si_hay_persona(labels):
     
     return False
 
-
-#Funcion para saber si la api trae resultados
-def parsear_resultado_object_and_scenes(response, label):
-
+#Parse and return results from API objects and scenes
+def parse_results_objects_and_scenes(response, label):
     try:
         if((label in response) and (len(response[label]) != 0)):
             return response[label]
@@ -38,40 +35,58 @@ def parsear_resultado_object_and_scenes(response, label):
         print('No hay labels')
         return {}
 
-
-#Funcion para obtener el dia mes y anno actual que servira como clave para la bbdd
-def obtener_fecha_actual():
-    dia = datetime.datetime.now().strftime("%d")
+#Return current date (month and year) that represents dynamodb key
+def get_current_date():
+    day = datetime.datetime.now().strftime("%d")
     month = datetime.datetime.now().strftime("%m")
     year = datetime.datetime.now().strftime("%Y")
-    return str(dia)+str(month)+str(year)
+    return str(day)+str(month)+str(year)
 
-
-#Funcion para parsear los datos de la api object and scenes
-def parsear_datos_object_escenes(labels_object):
-    datos = []
+#Parse and return data of object and scenes
+def parse_data_objects_and_scenes(labels_object):
+    data = []
     for label in labels_object:
-        datos.append(
+        data.append(
             {
                 'Name': label['Name'],
                 'Confidence': decimal.Decimal(str(label['Confidence']))
             }
         )
-    return datos
+    return data
 
-
-#Funcion para parsear los datos de la api de celebreties
-def parsear_datos_celebreties(labels_celebrities):
-    datos = []
+#Parse and return data of celebrities 
+def parse_data_celebrities(labels_celebrities):
+    data = []
     for label in labels_celebrities:
         url = 'Nulo'
         if('Urls' in label and len(label['Urls']) != 0):
             url = label['Urls'][0]
-        datos.append(
+        data.append(
             {
                 'Name': label['Name'],
                 'Id': label['Id'],
                 'Url': url
             }
         )
-    return datos
+    return data
+
+#Parse and return words of the cloud
+def parse_data_query(data):
+    d = []
+    l1 = []
+    for r in data:
+        if(len(r['Labels']) != 0):
+            for l in r['Labels']:
+                if l['Name'] not in l1:
+                    l1.append(l['Name'])
+                    d.append({
+                        'text': l['Name'],
+                        'weight' : float(l['Confidence']),
+                        'color' : generate_random_color()
+                    })
+    return d
+
+#Return random color
+def generate_random_color():
+    r = lambda: random.randint(0,255)
+    return '#%02X%02X%02X' % (r(),r(),r())
