@@ -66,7 +66,15 @@ functions:
       - http:
           path: celebrities
           method: get
-
+  
+  s3-get-url:
+    handler: handlers/handler.s3_get_url
+    events:
+      - http:
+          path: key/{key}
+          method: get
+          cors: true
+    
   download-images-elpais:
     handler: handlers/handler.download_images_elpais
     events:

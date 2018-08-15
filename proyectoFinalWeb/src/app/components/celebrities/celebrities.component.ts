@@ -8,6 +8,7 @@ import { ApiServiceService } from '../../services/api-service.service';
 })
 export class CelebritiesComponent implements OnInit {
   celebrities = [];
+  urlImagen = '';
 
   constructor(private _apiService: ApiServiceService) { }
 
@@ -20,6 +21,20 @@ export class CelebritiesComponent implements OnInit {
       },
       error => {
         console.error(error);
+      }
+    );
+  }
+
+  getS3Url(key: string) {
+    key = key.replace('/', '%2F');
+    this._apiService.getS3Url(key).subscribe(
+      resp => {
+        resp = resp.json();
+        console.log(resp);
+        this.urlImagen = resp.url;
+      },
+      error => {
+        console.log(error);
       }
     );
   }

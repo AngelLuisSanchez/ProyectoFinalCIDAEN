@@ -17,3 +17,14 @@ def move_to_s3_folder(directorio):
         print(response)
         i.close()
         time.sleep(10)
+
+def get_url(key):
+    url = s3.generate_presigned_url(
+        ClientMethod='get_object',
+        Params={
+            'Bucket': s3bucket,
+            'Key': key
+        }
+    )
+
+    return url

@@ -1,22 +1,28 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th>#</th>
                         <th>Name</th>
                         <th>Url</th>
+                        <th>Imagen</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let celebrity of celebrities; let i = index">
+                    <tr *ngFor="let item of celebrities; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{celebrity.Name}}</td>
-                        <td>{{celebrity.Url == 'Nulo' ? '-' : celebrity.Url}}</td>
+                        <td>{{item.celebrity.Name}}</td>
+                        <td *ngIf="item.celebrity.Url == 'Nulo'">-</td>
+                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="item.celebrity.Url" target="_blank">{{item.celebrity.Url}}</a></td>
+                        <td><button class="btn btn-outline-primary" (click)="getS3Url(item.idImagen)">Imagen</button></td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="col-md-5">
+            <img [src]="urlImagen" alt="" width="50" height="50">
         </div>
     </div>
     <div class="row">

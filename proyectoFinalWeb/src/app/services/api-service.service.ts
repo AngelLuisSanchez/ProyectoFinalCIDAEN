@@ -19,8 +19,14 @@ export class ApiServiceService {
     return this.http.get(url);
   }
 
-  getCloudTagss(): Observable<any> {
+  getCloudTags(): Observable<any> {
     const url = this.endpointangel + 'cloudtags';
+
+    return this.http.get(url);
+  }
+
+  getS3Url(key: string): Observable<any> {
+    const url = this.endpointangel + 'key/' + key;
 
     return this.http.get(url);
   }

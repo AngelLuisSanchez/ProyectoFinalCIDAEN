@@ -39,6 +39,10 @@ def getCelebrities():
     celebrities = []
     for item in items:
         if len(item['CelebrityFaces']) != 0:
+            idImagen = item['idimagen']
             for celebrity in item['CelebrityFaces']:
-                celebrities.append(celebrity)
+                celebrities.append({
+                    'celebrity': celebrity,
+                    'idImagen': idImagen
+                })
     return celebrities
