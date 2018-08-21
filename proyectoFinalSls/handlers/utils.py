@@ -108,3 +108,10 @@ def parse_list_celebrities(items):
 def parse_date(date):
     dateSplit = date.split('-')
     return dateSplit[2]+dateSplit[1]+dateSplit[0]
+
+#Return count of celebrities
+def countCelebrities(items):
+    count = 0
+    for item in items:
+        count += len(item['CelebrityFaces'])
+    return count

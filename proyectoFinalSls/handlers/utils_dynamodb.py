@@ -27,9 +27,9 @@ def create_item(labels_object, labels_celebrities, newspaper, idimage):
     
     table.put_item(Item=item)
 
-def get_cloud_tags_newspaper(periodico):
+def get_cloud_tags_newspaper(newspaper):
     response = table.query(   
-        KeyConditionExpression=Key('daymonthYear').eq(utils.get_current_date()) & Key('idimagen').begins_with(periodico)
+        KeyConditionExpression=Key('daymonthYear').eq(utils.get_current_date()) & Key('idimagen').begins_with(newspaper)
     )['Items']
     response = utils.parse_data_query(response)
     return response
@@ -38,3 +38,18 @@ def getCelebrities(paramDate):
     items = table.query(KeyConditionExpression=Key('daymonthYear').eq(utils.parse_date(paramDate)))['Items']
     celebrities = utils.parse_list_celebrities(items)
     return celebrities
+
+def getCountCelebritiesByNewspaper():
+    abcItems = table.scan(FilterExpression=Key('idimagen').begins_with('abc'))['Items']
+    elmundoItems = table.scan(FilterExpression=Key('idimagen').begins_with('elmundo'))['Items']
+    diarioesItems = table.scan(FilterExpression=Key('idimagen').begins_with('diarioes'))['Items']
+    elpaisItems = table.scan(FilterExpression=Key('idimagen').begins_with('elpais'))['Items']
+
+    counts = {
+        'abc': utils.countCelebrities(abcItems),
+        'elmundo': utils.countCelebrities(elmundoItems),
+        'diarioes': utils.countCelebrities(diarioesItems),
+        'elpais': utils.countCelebrities(elpaisItems)
+    }
+
+    return counts

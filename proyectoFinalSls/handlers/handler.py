@@ -80,3 +80,8 @@ def s3_get_url(event, context):
     url = utils_s3.get_url(keyaux)
 
     return utils.jsonify({'url': url})
+
+def countCelebritiesByNewspaper(event, context):
+    counts = utils_dynamodb.getCountCelebritiesByNewspaper()
+
+    return utils.jsonify({'counts': counts})

@@ -8,7 +8,7 @@ import { Observable } from '../../../node_modules/rxjs';
 
 export class ApiServiceService {
 
-  endpointangel = 'XXXXXXXX';
+  endpointangel = 'https://i4hwmlikwl.execute-api.eu-west-1.amazonaws.com/dev/';
   endpointalberto = 'XXXXXXXX';
 
   constructor(private http: Http) { }
@@ -27,6 +27,12 @@ export class ApiServiceService {
 
   getS3Url(key: string): Observable<any> {
     const url = this.endpointangel + 'key/' + key;
+
+    return this.http.get(url);
+  }
+
+  getCountCelebrities(): Observable<any> {
+    const url = this.endpointangel + 'countCelebrities'
 
     return this.http.get(url);
   }
