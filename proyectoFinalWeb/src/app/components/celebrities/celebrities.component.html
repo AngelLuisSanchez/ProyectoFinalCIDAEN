@@ -2,7 +2,7 @@
     <div class="row">
         <h5>Consult Celebrities</h5>
         <div class="col-md-3">
-            <input class="form-control" type="date" name="date" value="2018-08-01" #date/>
+            <input class="form-control" type="date" name="date" value="2018-08-13" #date/>
         </div>
         <div class="col-md-3">
             <button class="btn btn-outline-primary" (click)="searchCelebrities(date.value)">Search</button>
@@ -27,7 +27,7 @@
                         <td>{{item.celebrity.Name}}</td>
                         <td>{{item.idImagen.split('/')[0]}}</td>
                         <td *ngIf="item.celebrity.Url == 'Nulo'">-</td>
-                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="item.celebrity.Url" target="_blank">{{item.celebrity.Url.substr(0,10)}}...</a></td>
+                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="https://{{item.celebrity.Url}}" target="_blank">{{item.celebrity.Url.substr(0,10)}}...</a></td>
                         <td><button class="btn btn-outline-primary" (click)="getS3Url(item.idImagen)">Imagen</button></td>
                     </tr>
                 </tbody>
@@ -45,8 +45,8 @@
         <div class="col-md-6">
             <canvas id="barChart"></canvas>
         </div>
-    </div>
-    <div class="row">
-        <h5>(TODO) Grafica linear personaje/dia</h5>
+        <div class="col-md-6">
+            <canvas id="barChartByDate"></canvas>
+        </div>
     </div>
 </div>

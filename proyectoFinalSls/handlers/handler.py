@@ -68,9 +68,9 @@ def list_celebrities(event, context):
     params = event['pathParameters']
     paramDate = params['date']
 
-    celebrities = utils_dynamodb.getCelebrities(paramDate)
+    obj = utils_dynamodb.getCelebrities(paramDate)
 
-    return utils.jsonify({'datos': celebrities})
+    return utils.jsonify({'obj': obj})
 
 def s3_get_url(event, context):
     params = event['pathParameters']

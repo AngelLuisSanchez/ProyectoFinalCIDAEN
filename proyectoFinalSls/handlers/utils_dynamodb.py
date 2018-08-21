@@ -37,7 +37,29 @@ def get_cloud_tags_newspaper(newspaper):
 def getCelebrities(paramDate):
     items = table.query(KeyConditionExpression=Key('daymonthYear').eq(utils.parse_date(paramDate)))['Items']
     celebrities = utils.parse_list_celebrities(items)
-    return celebrities
+
+    abcItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
+        utils.parse_date(paramDate)) & Key('idimagen').begins_with('abc'))['Items']
+    elmundoItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
+        utils.parse_date(paramDate)) & Key('idimagen').begins_with('elmundo'))['Items']
+    diarioesItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
+        utils.parse_date(paramDate)) & Key('idimagen').begins_with('diarioes'))['Items']
+    elpaisItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
+        utils.parse_date(paramDate)) & Key('idimagen').begins_with('elpais'))['Items']
+
+    countsByDate = {
+        'abc': utils.countCelebrities(abcItemsByDate),
+        'elmundo': utils.countCelebrities(elmundoItemsByDate),
+        'diarioes': utils.countCelebrities(diarioesItemsByDate),
+        'elpais': utils.countCelebrities(elpaisItemsByDate)
+    }
+
+    obj = {
+        'celebrities': celebrities,
+        'countsByDate': countsByDate
+    }
+
+    return obj
 
 def getCountCelebritiesByNewspaper():
     abcItems = table.scan(FilterExpression=Key('idimagen').begins_with('abc'))['Items']
