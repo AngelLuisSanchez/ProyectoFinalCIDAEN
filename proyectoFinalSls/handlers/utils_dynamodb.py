@@ -34,15 +34,7 @@ def get_cloud_tags_newspaper(periodico):
     response = utils.parse_data_query(response)
     return response
 
-def getCelebrities():
-    items = table.scan()['Items']
-    celebrities = []
-    for item in items:
-        if len(item['CelebrityFaces']) != 0:
-            idImagen = item['idimagen']
-            for celebrity in item['CelebrityFaces']:
-                celebrities.append({
-                    'celebrity': celebrity,
-                    'idImagen': idImagen
-                })
+def getCelebrities(paramDate):
+    items = table.query(KeyConditionExpression=Key('daymonthYear').eq(utils.parse_date(paramDate)))['Items']
+    celebrities = utils.parse_list_celebrities(items)
     return celebrities

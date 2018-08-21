@@ -13,8 +13,8 @@ export class ApiServiceService {
 
   constructor(private http: Http) { }
 
-  getCelebrities(): Observable<any> {
-    const url = this.endpointangel + 'celebrities';
+  getCelebrities(date: string): Observable<any> {
+    const url = this.endpointangel + 'celebrities/' + date;
 
     return this.http.get(url);
   }

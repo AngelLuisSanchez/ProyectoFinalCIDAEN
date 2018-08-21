@@ -1,11 +1,22 @@
 <div class="container">
     <div class="row">
+        <h5>Consult Celebrities</h5>
+        <div class="col-md-3">
+            <input class="form-control" type="date" name="date" value="2018-08-01" #date/>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-outline-primary" (click)="searchCelebrities(date.value)">Search</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-md-7">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Newspaper</th>
                         <th>Url</th>
                         <th>Imagen</th>
                     </tr>
@@ -14,19 +25,104 @@
                     <tr *ngFor="let item of celebrities; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{item.celebrity.Name}}</td>
+                        <td>{{item.idImagen.split('/')[0]}}</td>
                         <td *ngIf="item.celebrity.Url == 'Nulo'">-</td>
-                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="item.celebrity.Url" target="_blank">{{item.celebrity.Url}}</a></td>
+                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="item.celebrity.Url" target="_blank">{{item.celebrity.Url.substr(0,10)}}...</a></td>
                         <td><button class="btn btn-outline-primary" (click)="getS3Url(item.idImagen)">Imagen</button></td>
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="celebrities.length === 0 && firstSearch" class="alert alert-primary" role="alert">
+                No results for {{date.value}}
+            </div>
         </div>
-        <div class="col-md-5">
-            <img [src]="urlImagen" alt="" width="50" height="50">
+
+        <div class="col-md-4">
+            <img [src]="urlImagen" alt="" width="400" height="400">
         </div>
     </div>
     <div class="row">
         <h5>(TODO) Grafica linear personaje/dia</h5>
+        <!-- <div style="width: 75%">
+            <canvas id="canvas"></canvas>
+        </div>
+        <button id="randomizeData">Randomize Data</button>
+        <script>
+            var barChartData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    backgroundColor: window.chartColors.red,
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }, {
+                    label: 'Dataset 2',
+                    backgroundColor: window.chartColors.blue,
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }, {
+                    label: 'Dataset 3',
+                    backgroundColor: window.chartColors.green,
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor()
+                    ]
+                }]
+            };
+            window.onload = function() {
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Chart.js Bar Chart - Stacked'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true
+                            }]
+                        }
+                    }
+                });
+            };
+            document.getElementById('randomizeData').addEventListener('click', function() {
+                barChartData.datasets.forEach(function(dataset) {
+                    dataset.data = dataset.data.map(function() {
+                        return randomScalingFactor();
+                    });
+                });
+                window.myBar.update();
+            });
+        </script> -->
     </div>
     <div class="row">
         <h5>(TODO) Grafica linear periodico/personaje</h5>

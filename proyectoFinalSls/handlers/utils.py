@@ -90,3 +90,21 @@ def parse_data_query(data):
 def generate_random_color():
     r = lambda: random.randint(0,255)
     return '#%02X%02X%02X' % (r(),r(),r())
+
+#Return parse list celebrities
+def parse_list_celebrities(items):
+    celebrities = []
+    for item in items:
+        if len(item['CelebrityFaces']) != 0:
+            idImagen = item['idimagen']
+            for celebrity in item['CelebrityFaces']:
+                celebrities.append({
+                    'celebrity': celebrity,
+                    'idImagen': idImagen
+                })
+    return celebrities
+
+#Return parse date to search in dynamo
+def parse_date(date):
+    dateSplit = date.split('-')
+    return dateSplit[2]+dateSplit[1]+dateSplit[0]

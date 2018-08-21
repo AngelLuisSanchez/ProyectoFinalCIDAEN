@@ -64,8 +64,9 @@ functions:
     handler: handlers/handler.list_celebrities
     events:
       - http:
-          path: celebrities
+          path: celebrities/{date}
           method: get
+          cors: true
   
   s3-get-url:
     handler: handlers/handler.s3_get_url

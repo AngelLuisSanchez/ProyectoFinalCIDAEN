@@ -9,20 +9,11 @@ import { ApiServiceService } from '../../services/api-service.service';
 export class CelebritiesComponent implements OnInit {
   celebrities = [];
   urlImagen = '';
+  firstSearch = false;
 
   constructor(private _apiService: ApiServiceService) { }
 
   ngOnInit() {
-    this._apiService.getCelebrities().subscribe(
-      resp => {
-        resp = resp.json();
-        console.log(resp.datos);
-        this.celebrities = resp.datos;
-      },
-      error => {
-        console.error(error);
-      }
-    );
   }
 
   getS3Url(key: string) {
@@ -37,6 +28,18 @@ export class CelebritiesComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  searchCelebrities(dateAux: string) {
+    this.urlImagen = '';
+    this._apiService.getCelebrities(dateAux).subscribe(resp => {
+        resp = resp.json();
+        console.log(resp.datos);
+        this.celebrities = resp.datos;
+        this.firstSearch = true;
+      }, error => {
+        console.error(error);
+      });
   }
 
 }
