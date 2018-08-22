@@ -65,6 +65,23 @@ def get_cloud_tags(event, context):
     return utils.jsonify({'datos': cloudTags})
 
 def list_celebrities(event, context):
-    celebrities = utils_dynamodb.getCelebrities()
+    params = event['pathParameters']
+    paramDate = params['date']
 
-    return utils.jsonify({'datos': celebrities})
+    obj = utils_dynamodb.getCelebrities(paramDate)
+
+    return utils.jsonify({'obj': obj})
+
+def s3_get_url(event, context):
+    params = event['pathParameters']
+    paramKey = params['key']
+    keyaux = paramKey.replace('%2F', '/')
+
+    url = utils_s3.get_url(keyaux)
+
+    return utils.jsonify({'url': url})
+
+def countCelebritiesByNewspaper(event, context):
+    counts = utils_dynamodb.getCountCelebritiesByNewspaper()
+
+    return utils.jsonify({'counts': counts})

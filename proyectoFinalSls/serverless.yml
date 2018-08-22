@@ -64,9 +64,26 @@ functions:
     handler: handlers/handler.list_celebrities
     events:
       - http:
-          path: celebrities
+          path: celebrities/{date}
           method: get
+          cors: true
+  
+  count-celebrities:
+    handler: handlers/handler.countCelebritiesByNewspaper
+    events:
+      - http:
+          path: countCelebrities
+          method: get
+          cors: true
 
+  s3-get-url:
+    handler: handlers/handler.s3_get_url
+    events:
+      - http:
+          path: key/{key}
+          method: get
+          cors: true
+    
   download-images-elpais:
     handler: handlers/handler.download_images_elpais
     events:
@@ -115,7 +132,7 @@ resources:
   Resources:
     TodosDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Delete
+      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -

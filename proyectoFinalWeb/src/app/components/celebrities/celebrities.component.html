@@ -1,28 +1,70 @@
 <div class="container">
     <div class="row">
+        <h5>Consult Celebrities</h5>
+        <div class="col-md-3">
+            <input class="form-control" type="date" name="date" value="2018-08-13" #date/>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-outline-primary" (click)="searchCelebrities(date.value)">Search</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-md-6">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="barChartByDate"></canvas>
+        </div>
+    </div>
+    <br>
+    <div class="row" *ngIf="celebrities.length !== 0 && !firstSearch">
+        <div class="col-md-12">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Newspaper</th>
                         <th>Url</th>
+                        <th>Image</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let celebrity of celebrities; let i = index">
+                    <tr *ngFor="let item of celebrities; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{celebrity.Name}}</td>
-                        <td>{{celebrity.Url == 'Nulo' ? '-' : celebrity.Url}}</td>
+                        <td>{{item.celebrity.Name}}</td>
+                        <td>{{item.idImagen.split('/')[0]}}</td>
+                        <td *ngIf="item.celebrity.Url == 'Nulo'">-</td>
+                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="https://{{item.celebrity.Url}}" target="_blank">{{item.celebrity.Url.substr(0,10)}}...</a></td>
+                        <td><button class="btn btn-outline-primary" (click)="getS3Url(item.idImagen, item.celebrity.Name)">Image</button></td>
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="celebrities.length === 0 && firstSearch" class="alert alert-primary" role="alert">
+                No results for {{date.value}}
+            </div>
         </div>
+
+        <!-- <div class="col-md-4">
+            <img [src]="urlImagen" alt="" width="400" height="400">
+        </div> -->
     </div>
-    <div class="row">
-        <h5>(TODO) Grafica linear personaje/dia</h5>
-    </div>
-    <div class="row">
-        <h5>(TODO) Grafica linear periodico/personaje</h5>
+</div>
+
+<!-- Modal Image -->
+<div class="modal fade" id="imageModal" role="alert" aria-labelledby="imageModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="envioModalLabel">{{celebrityName}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img [src]="urlImagen" alt="" width="475">
+            </div>
+        </div>
     </div>
 </div>

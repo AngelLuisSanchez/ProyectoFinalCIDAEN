@@ -8,19 +8,31 @@ import { Observable } from '../../../node_modules/rxjs';
 
 export class ApiServiceService {
 
-  endpointangel = 'XXXXXXXX';
+  endpointangel = 'XXXXXXXXX';
   endpointalberto = 'XXXXXXXX';
 
   constructor(private http: Http) { }
 
-  getCelebrities(): Observable<any> {
-    const url = this.endpointangel + 'celebrities';
+  getCelebrities(date: string): Observable<any> {
+    const url = this.endpointangel + 'celebrities/' + date;
 
     return this.http.get(url);
   }
 
-  getCloudTagss(): Observable<any> {
+  getCloudTags(): Observable<any> {
     const url = this.endpointangel + 'cloudtags';
+
+    return this.http.get(url);
+  }
+
+  getS3Url(key: string): Observable<any> {
+    const url = this.endpointangel + 'key/' + key;
+
+    return this.http.get(url);
+  }
+
+  getCountCelebrities(): Observable<any> {
+    const url = this.endpointangel + 'countCelebrities'
 
     return this.http.get(url);
   }

@@ -12,7 +12,7 @@ export class CloudtagComponent implements OnInit {
   @ViewChild(TagCloudComponent) tagCloudComponent: TagCloudComponent;
 
   options: CloudOptions = {
-    width : 800,
+    width : 500,
     height : 300,
     overflow: false
   };
@@ -31,7 +31,7 @@ export class CloudtagComponent implements OnInit {
   constructor(private _apiService: ApiServiceService) { }
 
   ngOnInit(): void {
-    this._apiService.getCloudTagss().subscribe(
+    this._apiService.getCloudTags().subscribe(
       resp => {
         resp = resp.json()['datos'];
         this.elpais = resp[0]['elpais'];
