@@ -12,7 +12,7 @@ export class CloudtagComponent implements OnInit {
   @ViewChild(TagCloudComponent) tagCloudComponent: TagCloudComponent;
 
   options: CloudOptions = {
-    width : 800,
+    width : 500,
     height : 300,
     overflow: false
   };

@@ -2,17 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../services/api-service.service';
 import { Chart } from 'chart.js';
 
+declare var $: any;
+
 @Component({
   selector: 'app-celebrities',
   templateUrl: './celebrities.component.html',
   styleUrls: ['./celebrities.component.css']
 })
+
 export class CelebritiesComponent implements OnInit {
   celebrities = [];
   urlImagen = '';
-  firstSearch = false;
+  firstSearch = true;
   barChart = [];
   barChartByDate = [];
+  celebrityName = '';
 
   constructor(private _apiService: ApiServiceService) { }
 
@@ -56,13 +60,15 @@ export class CelebritiesComponent implements OnInit {
     );
   }
 
-  getS3Url(key: string) {
+  getS3Url(key: string, name: string) {
     key = key.replace('/', '%2F');
     this._apiService.getS3Url(key).subscribe(
       resp => {
         resp = resp.json();
         console.log(resp);
         this.urlImagen = resp.url;
+        this.celebrityName = name;
+        (<any>$('#imageModal')).modal({ backdrop: 'static', keyboard: false });
       },
       error => {
         console.log(error);
@@ -76,7 +82,7 @@ export class CelebritiesComponent implements OnInit {
         resp = resp.json();
         console.log(resp.obj);
         this.celebrities = resp.obj.celebrities;
-        this.firstSearch = true;
+        this.firstSearch = false;
 
         const countsByDate = resp.obj.countsByDate;
 

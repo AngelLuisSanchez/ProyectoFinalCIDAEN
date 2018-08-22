@@ -1,56 +1,51 @@
-<h5>En este apartado mostraremos una nube de palabras obtenidas para el día de hoy con las etiquetas obtenidas de las imagenes
-
-</h5>
-
-<br>
-
-<h6>El Pais</h6>
-<div class="row">
-    <div class="col-sm-4">
-        El País es un periódico español fundado en 1976. Se redacta en español aunque algunas versiones autonómicas utilizan otros idiomas en algunos suplementos (por ejemplo, en el Quadern Catalunya). Según datos certificados por la Oficina de Justificación
-        de la Difusión (OJD) y referidos al periodo de julio de 2016 a junio de 2017, el promedio de tirada de El País fue de 231 140 ejemplares y el promedio de difusión de 180 765, lo que le convierte en el diario de mayor difusión de España, incluida
-        la prensa deportiva.
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>El País</th>
+                        <th>El Mundo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <angular-tag-cloud [data]="elpais" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                        <td>
+                            <angular-tag-cloud [data]="elmundo" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="col-sm-8">
-        <angular-tag-cloud [data]="elpais" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
-        </angular-tag-cloud>
-    </div>
-</div>
 
-<br>
-
-<h6>El Mundo</h6>
-<div class="row">
-    <div class="col-sm-4">
-        El Mundo, anteriormente denominado formalmente El Mundo del siglo XXI, es un periódico español diario y de pago.3​ Tiene su sede en Madrid. El director desde su fundación el 23 de octubre de 1989 hasta el 30 de enero de 2014 fue Pedro J. Ramírez. Además
-        de la edición general impresa de ámbito nacional (ISSN 1697-0179), ha contado y cuenta con distintas ediciones regionales y locales
-    </div>
-    <div class="col-sm-8">
-        <angular-tag-cloud [data]="elmundo" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
-        </angular-tag-cloud>
-    </div>
-</div>
-
-<h6>Diario.es</h6>
-<div class="row">
-    <div class="col-sm-4">
-        eldiario.es es un medio de comunicación digital español, creado en 2012 y editado en castellano, disponible desde el 18 de septiembre de 2012.2​ Está dirigido por Ignacio Escolar, fundador y exdirector de Público, y agrupa en su plantilla a antiguos redactores
-        que formaban parte del mismo hasta el cierre de su edición en papel. Está editado por la sociedad limitada: Diario de Prensa Digital S.L
-    </div>
-    <div class="col-sm-8">
-        <angular-tag-cloud [data]="diarioes" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
-        </angular-tag-cloud>
-    </div>
-</div>
-
-<h6>ABC</h6>
-<div class="row">
-    <div class="col-sm-4">
-        ABC es un diario español de línea conservadora, monárquica y católica.2​ Fundado en 1903, ha venido editándose desde entonces. Entre sus señas de identidad destaca el formato: se edita con grapa y su formato folio, arrevistado; también la presencia de
-        un artículo de opinión de la tercera página, denominado genéricamente «La Tercera». ABC cuenta con once ediciones en España, entre las que destacan especialmente (por antigüedad y presencia) las de Madrid y Sevilla.
-    </div>
-    <div class="col-sm-8">
-        <angular-tag-cloud [data]="abc" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
-        </angular-tag-cloud>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Diario.es</th>
+                        <th>ABC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <angular-tag-cloud [data]="diarioes" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                        <td>
+                            <angular-tag-cloud [data]="abc" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
