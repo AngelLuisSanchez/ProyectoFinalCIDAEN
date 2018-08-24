@@ -8,52 +8,47 @@ from handlers import utils_crawler
 from handlers import utils_s3
 
 def image_uploaded(event, context):
-    file_obj = event['Records'][0]
-    filePath = str(file_obj['s3']['object']['key'])
-    folder = filePath.split('/')[0]
-    fileName = filePath.split('/')[1]
-    bucketName = file_obj['s3']['bucket']['name']
+
+    for e in event['Records']:
+        file_obj = e
+        filePath = str(file_obj['s3']['object']['key'])
+        folder = filePath.split('/')[0]
+        fileName = filePath.split('/')[1]
+        bucketName = file_obj['s3']['bucket']['name']
+        
+        #Call API Rekognition to recognize objects and scenes
+        response = utils_rekognition.recognize_object_and_scenes(bucketName, filePath)
+        
+        #Get results objects and scenes
+        labels_object = utils.parse_results_objects_and_scenes(response, 'Labels')
+        
+        #Check labels for people
+        size = len(labels_object) != 0
+        personas = utils.check_for_people(labels_object)
+        labels_celebrities = {}
+        if(size and personas):
+            #Call API Rekognition to recognize celebrities
+            response = utils_rekognition.recognize_celebrities(bucketName, filePath)
+            labels_celebrities = utils.parse_results_objects_and_scenes(response, 'CelebrityFaces')
+            
+        print(labels_object)
+        print(labels_celebrities)
+        print("----------------------")
+        
+        #Save results into dynamo
+        utils_dynamodb.create_item(labels_object, labels_celebrities, folder, fileName)
+
     
-    #Call API Rekognition to recognize objects and scenes
-    response = utils_rekognition.recognize_object_and_scenes(bucketName, filePath)
 
-    #Get results objects and scenes
-    labels_object = utils.parse_results_objects_and_scenes(response, 'Labels')
+def download_images(event, context):
 
-    #Check labels for people
-    size = len(labels_object) != 0
-    personas = utils.check_for_people(labels_object)
-    labels_celebrities = {}
-    if(size and personas):
-        #Call API Rekognition to recognize celebrities
-        response = utils_rekognition.recognize_celebrities(bucketName, filePath)
-        labels_celebrities = utils.parse_results_objects_and_scenes(response, 'CelebrityFaces')
-    
-    print(labels_object)
-    print(labels_celebrities)
-    
-    #Save results into dynamo
-    utils_dynamodb.create_item(labels_object, labels_celebrities, folder, fileName)
+    periodicos = ['elpais', 'elmundo' , 'abc', 'diarioes']
+    url_periodicos = ['https://elpais.com/', 'http://www.elmundo.es/', 'https://www.abc.es/', 'https://www.eldiario.es']
 
-def download_images_elpais(event, context):
-    utils_crawler.download_images_covers_newspaper('elpais', 'https://elpais.com/')
-    os.listdir('/tmp/')
-    utils_s3.move_to_s3_folder('elpais')
+    for i in range(len(periodicos)):
+        utils_crawler.download_images_covers_newspaper(periodicos[i], url_periodicos[i]);
+        utils_s3.move_to_s3_folder(periodicos[i])
 
-def download_images_elmundo(event, context):
-    utils_crawler.download_images_covers_newspaper('elmundo', 'http://www.elmundo.es/')
-    os.listdir('/tmp/')
-    utils_s3.move_to_s3_folder('elmundo')
-
-def download_images_abc(event, context):
-    utils_crawler.download_images_covers_newspaper('abc', 'https://www.abc.es/')
-    os.listdir('/tmp/')
-    utils_s3.move_to_s3_folder('abc')
-
-def download_images_diarioes(event, context):
-    utils_crawler.download_images_covers_newspaper('diarioes', 'https://www.eldiario.es')
-    os.listdir('/tmp/')
-    utils_s3.move_to_s3_folder('diarioes')
 
 def get_cloud_tags(event, context):
     newspapers = ['elpais', 'diarioes', 'elmundo', 'abc']

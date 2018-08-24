@@ -26,7 +26,7 @@ provider:
   timeout: 300
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.angelalberto3.com
+    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.angelalberto2.com
     DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
 
   iamRoleStatements:
@@ -84,49 +84,17 @@ functions:
           method: get
           cors: true
     
-  download-images-elpais:
-    handler: handlers/handler.download_images_elpais
+  download-images:
+    handler: handlers/handler.download_images
     events:
       - schedule: cron(00 06 * * ? *)
-
-  download-images-elmundo:
-    handler: handlers/handler.download_images_elmundo
-    events:
-      - schedule: cron(05 06 * * ? *)
-
-  download-images-abc:
-    handler: handlers/handler.download_images_abc
-    events:
-      - schedule: cron(10 06 * * ? *)
-
-  download-images-diarioes:
-    handler: handlers/handler.download_images_diarioes
-    events:
-      - schedule: cron(15 06 * * ? *)
 
   s3-new-image:
     handler: handlers/handler.image_uploaded
     events:
-      - s3:
+     - s3:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
-          rules:
-            - prefix: elpais/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: elmundo/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: abc/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: diarioes/
 
 resources:
   Resources:
