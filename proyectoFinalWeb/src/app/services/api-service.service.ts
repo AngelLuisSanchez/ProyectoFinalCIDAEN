@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Observable } from '../../../node_modules/rxjs';
+import { Observable } from 'rxjs';
+import { Celebrities } from '../interfaces/celebrities';
+import { HttpClient } from '@angular/common/http';
+import { CounterCelebrities } from '../interfaces/counter-celebrities';
+import { map } from 'rxjs/operators';
+import { CloudTags } from '../interfaces/cloud-tags';
 
 @Injectable({
   providedIn: 'root'
@@ -8,33 +12,53 @@ import { Observable } from '../../../node_modules/rxjs';
 
 export class ApiServiceService {
 
-  endpointangel = 'XXXXXXXXX';
+  endpointangel = 'XXXXXXXXXX';
   endpointalberto = 'XXXXXXXX';
 
-  constructor(private http: Http) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getCelebrities(date: string): Observable<any> {
-    const url = this.endpointangel + 'celebrities/' + date;
+  getCelebrities(date: string): Observable <Celebrities> {
+    const endpoint = this.endpointangel + 'celebrities/' + date;
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint)
+      .pipe(
+        map(celebrities => {
+          return <Celebrities> celebrities.celebrities;
+        })
+      );
   }
 
   getCloudTags(): Observable<any> {
-    const url = this.endpointangel + 'cloudtags';
+    const endpoint = this.endpointangel + 'cloudtags';
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint)
+      .pipe(
+        map(cloudTags => {
+          return <CloudTags> cloudTags.cloudTags;
+        })
+      );
   }
 
-  getS3Url(key: string): Observable<any> {
-    const url = this.endpointangel + 'key/' + key;
+  getS3Url(key: string): Observable<string> {
+    const endpoint = this.endpointangel + 'key/' + key;
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint)
+      .pipe(
+        map(url => {
+          return <string> url.url;
+        })
+      );
   }
 
-  getCountCelebrities(): Observable<any> {
-    const url = this.endpointangel + 'countCelebrities'
+  getCountCelebrities(): Observable<CounterCelebrities> {
+    const endpoint = this.endpointangel + 'countCelebrities';
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint)
+    .pipe(
+      map(counterCelebrities => {
+        return <CounterCelebrities>counterCelebrities.counterCelebrities;
+      })
+    );
   }
 
 }

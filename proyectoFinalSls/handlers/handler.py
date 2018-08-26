@@ -38,34 +38,30 @@ def image_uploaded(event, context):
         #Save results into dynamo
         utils_dynamodb.create_item(labels_object, labels_celebrities, folder, fileName)
 
-    
-
 def download_images(event, context):
-
     periodicos = ['elpais', 'elmundo' , 'abc', 'diarioes']
     url_periodicos = ['https://elpais.com/', 'http://www.elmundo.es/', 'https://www.abc.es/', 'https://www.eldiario.es']
 
     for i in range(len(periodicos)):
-        utils_crawler.download_images_covers_newspaper(periodicos[i], url_periodicos[i]);
+        utils_crawler.download_images_covers_newspaper(periodicos[i], url_periodicos[i])
         utils_s3.move_to_s3_folder(periodicos[i])
-
 
 def get_cloud_tags(event, context):
     newspapers = ['elpais', 'diarioes', 'elmundo', 'abc']
     cloudTags = []
-    for p in newspapers:
+    for newspaper in newspapers:
         cloudTags.append({
-            p: utils_dynamodb.get_cloud_tags_newspaper(p)
+            newspaper: utils_dynamodb.get_cloud_tags_newspaper(newspaper)
         })
-    return utils.jsonify({'datos': cloudTags})
+    return utils.jsonify({'cloudTags': cloudTags})
 
 def list_celebrities(event, context):
     params = event['pathParameters']
     paramDate = params['date']
 
-    obj = utils_dynamodb.getCelebrities(paramDate)
+    celebrities = utils_dynamodb.getCelebrities(paramDate)
 
-    return utils.jsonify({'obj': obj})
+    return utils.jsonify({'celebrities': celebrities})
 
 def s3_get_url(event, context):
     params = event['pathParameters']
@@ -77,6 +73,6 @@ def s3_get_url(event, context):
     return utils.jsonify({'url': url})
 
 def countCelebritiesByNewspaper(event, context):
-    counts = utils_dynamodb.getCountCelebritiesByNewspaper()
+    counterCelebrities = utils_dynamodb.getCountCelebritiesByNewspaper()
 
-    return utils.jsonify({'counts': counts})
+    return utils.jsonify({'counterCelebrities': counterCelebrities.__dict__})

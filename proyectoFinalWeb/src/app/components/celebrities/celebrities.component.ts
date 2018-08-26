@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../services/api-service.service';
 import { Chart } from 'chart.js';
+import { CounterCelebrities } from '../../interfaces/counter-celebrities';
+import { ListCelebrities } from '../../interfaces/list-celebrities';
 
 declare var $: any;
 
@@ -11,11 +13,13 @@ declare var $: any;
 })
 
 export class CelebritiesComponent implements OnInit {
-  celebrities = [];
+  listCelebrities: ListCelebrities[] = [];
+  counterCelebritiesByDate: CounterCelebrities;
+  counterCelebrities: CounterCelebrities;
   urlImagen = '';
   firstSearch = true;
-  barChart = [];
-  barChartByDate = [];
+  barChart: Chart;
+  barChartByDate: Chart;
   celebrityName = '';
 
   constructor(private _apiService: ApiServiceService) { }
@@ -23,8 +27,7 @@ export class CelebritiesComponent implements OnInit {
   ngOnInit() {
     this._apiService.getCountCelebrities().subscribe(
       resp => {
-        resp = resp.json();
-        console.log(resp);
+        this.counterCelebrities = resp;
 
         this.barChart = new Chart('barChart', {
           type: 'bar',
@@ -32,7 +35,12 @@ export class CelebritiesComponent implements OnInit {
             labels: ['ABC', 'El Mundo', 'Diarioes', 'El País'],
             datasets: [{
               label: '# of celebrities',
-              data: [resp.counts.abc, resp.counts.elmundo, resp.counts.diarioes, resp.counts.elpais],
+              data: [
+                this.counterCelebrities.abcCounter,
+                this.counterCelebrities.mundoCounter,
+                this.counterCelebrities.paisCounter,
+                this.counterCelebrities.diarioesCounter
+              ],
               backgroundColor: [
                 'rgba(255, 132, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -64,9 +72,7 @@ export class CelebritiesComponent implements OnInit {
     key = key.replace('/', '%2F');
     this._apiService.getS3Url(key).subscribe(
       resp => {
-        resp = resp.json();
-        console.log(resp);
-        this.urlImagen = resp.url;
+        this.urlImagen = resp;
         this.celebrityName = name;
         (<any>$('#imageModal')).modal({ backdrop: 'static', keyboard: false });
       },
@@ -77,14 +83,16 @@ export class CelebritiesComponent implements OnInit {
   }
 
   searchCelebrities(date: string) {
-    this.urlImagen = '';
-    this._apiService.getCelebrities(date).subscribe(resp => {
-        resp = resp.json();
-        console.log(resp.obj);
-        this.celebrities = resp.obj.celebrities;
-        this.firstSearch = false;
+    this._apiService.getCelebrities(date).subscribe(
+      celebrities => {
+        this.listCelebrities = celebrities.listCelebrities;
+        this.counterCelebritiesByDate = celebrities.counterCelebrities;
 
-        const countsByDate = resp.obj.countsByDate;
+        if (!this.firstSearch) {
+          this.barChartByDate.destroy();
+        } else {
+          this.firstSearch = false;
+        }
 
         this.barChartByDate = new Chart('barChartByDate', {
           type: 'bar',
@@ -92,7 +100,12 @@ export class CelebritiesComponent implements OnInit {
             labels: ['ABC', 'El Mundo', 'Diarioes', 'El País'],
             datasets: [{
               label: '# of celebrities',
-              data: [countsByDate.abc, countsByDate.elmundo, countsByDate.diarioes, countsByDate.elpais],
+              data: [
+                this.counterCelebritiesByDate.abcCounter,
+                this.counterCelebritiesByDate.mundoCounter,
+                this.counterCelebritiesByDate.diarioesCounter,
+                this.counterCelebritiesByDate.paisCounter
+              ],
               backgroundColor: [
                 'rgba(255, 132, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',

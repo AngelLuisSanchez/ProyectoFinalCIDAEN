@@ -3,6 +3,9 @@ import datetime
 import decimal
 import random
 
+from classes import Celebrities
+from classes import WordCloud
+
 #Return json data
 def jsonify(obj):
     return {
@@ -71,20 +74,22 @@ def parse_data_celebrities(labels_celebrities):
     return data
 
 #Parse and return words of the cloud
-def parse_data_query(data):
-    d = []
+def parse_data_cloud_tag(data):
+    wordCloudTag = []
     l1 = []
     for r in data:
         if(len(r['Labels']) != 0):
             for l in r['Labels']:
                 if l['Name'] not in l1:
                     l1.append(l['Name'])
-                    d.append({
-                        'text': l['Name'],
-                        'weight' : float(l['Confidence']),
-                        'color' : generate_random_color()
-                    })
-    return d
+                    wordCloudTag.append(
+                        WordCloud.WordCloud(
+                            l['Name'],
+                            float(l['Confidence']),
+                            generate_random_color()
+                        )
+                    )
+    return wordCloudTag
 
 #Return random color
 def generate_random_color():
@@ -98,10 +103,14 @@ def parse_list_celebrities(items):
         if len(item['CelebrityFaces']) != 0:
             idImagen = item['idimagen']
             for celebrity in item['CelebrityFaces']:
-                celebrities.append({
-                    'celebrity': celebrity,
-                    'idImagen': idImagen
-                })
+                celebrities.append(
+                    Celebrities.Celebrities(
+                        celebrity['Name'],
+                        celebrity['Id'],
+                        celebrity['Url'],
+                        idImagen
+                    )
+                )
     return celebrities
 
 #Return parse date to search in dynamo

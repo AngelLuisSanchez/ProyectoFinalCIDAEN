@@ -11,10 +11,11 @@ import { CloudtagComponent } from './components/cloudtag/cloudtag.component';
 
 import { TagCloudModule } from 'angular-tag-cloud-module';
 import { CelebritiesComponent } from './components/celebrities/celebrities.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, NavbarComponent, CloudtagComponent, CelebritiesComponent],
-  imports: [BrowserModule, HttpModule, APP_ROUTING, TagCloudModule],
+  imports: [BrowserModule, HttpModule, APP_ROUTING, TagCloudModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent]
 })

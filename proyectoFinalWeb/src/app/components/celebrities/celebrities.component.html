@@ -18,7 +18,7 @@
         </div>
     </div>
     <br>
-    <div class="row" *ngIf="celebrities.length !== 0 && !firstSearch">
+    <div class="row" *ngIf="listCelebrities.length !== 0 && !firstSearch">
         <div class="col-md-12">
             <table class="table">
                 <thead class="thead-dark">
@@ -31,24 +31,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of celebrities; let i = index">
+                    <tr *ngFor="let item of listCelebrities; let i = index">
                         <td>{{ i + 1 }}</td>
-                        <td>{{item.celebrity.Name}}</td>
-                        <td>{{item.idImagen.split('/')[0]}}</td>
-                        <td *ngIf="item.celebrity.Url == 'Nulo'">-</td>
-                        <td *ngIf="item.celebrity.Url != 'Nulo'"><a href="https://{{item.celebrity.Url}}" target="_blank">{{item.celebrity.Url.substr(0,10)}}...</a></td>
-                        <td><button class="btn btn-outline-primary" (click)="getS3Url(item.idImagen, item.celebrity.Name)">Image</button></td>
+                        <td>{{item.Name}}</td>
+                        <td>{{item.IdImagen.split('/')[0]}}</td>
+                        <td *ngIf="item.Url == 'Nulo'">-</td>
+                        <td *ngIf="item.Url != 'Nulo'"><a href="https://{{item.Url}}" target="_blank">{{item.Url.substr(0,10)}}...</a></td>
+                        <td><button class="btn btn-outline-primary" (click)="getS3Url(item.IdImagen, item.Name)">Image</button></td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="celebrities.length === 0 && firstSearch" class="alert alert-primary" role="alert">
-                No results for {{date.value}}
-            </div>
         </div>
 
-        <!-- <div class="col-md-4">
-            <img [src]="urlImagen" alt="" width="400" height="400">
-        </div> -->
     </div>
 </div>
 

@@ -2,12 +2,14 @@ service: cidaen-proyectofinal-back
 
 plugins:
   - serverless-ephemeral
+  - serverless-pseudo-parameters
 
 package:
   exclude:
     - ./**
   include:
     - handlers/**
+    - classes/**
 
 custom:
   ephemeral:
@@ -26,8 +28,8 @@ provider:
   timeout: 300
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.angelalberto2.com
-    DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
+    S3_BUCKET: inputimages-${self:provider.stage}.#{AWS::AccountId}
+    DYNAMODB_TABLE: ProcessedImages-${self:provider.stage}.#{AWS::AccountId}
 
   iamRoleStatements:
     - Effect: 'Allow'
