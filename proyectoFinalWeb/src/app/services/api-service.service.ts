@@ -6,6 +6,7 @@ import { CounterCelebrities } from '../interfaces/counter-celebrities';
 import { map } from 'rxjs/operators';
 import { CloudTags } from '../interfaces/cloud-tags';
 import { Http } from '@angular/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,12 @@ import { Http } from '@angular/http';
 
 export class ApiServiceService {
 
-  endpointangel = 'https://u6t1l31gul.execute-api.eu-west-1.amazonaws.com/dev/';
-  endpointalberto = 'XXXXXXXX';
+  enpointgateway = environment.ENPOINT;
 
   constructor(private httpClient: HttpClient) { }
 
   getCelebrities(date: string): Observable <Celebrities> {
-    const endpoint = this.endpointangel + 'celebrities/' + date;
+    const endpoint = this.enpointgateway + 'celebrities/' + date;
 
     return this.httpClient.get(endpoint)
       .pipe(
@@ -30,7 +30,7 @@ export class ApiServiceService {
   }
 
   getCloudTags(): Observable<CloudTags> {
-    const endpoint = this.endpointangel + 'cloudtags';
+    const endpoint = this.enpointgateway + 'cloudtags';
 
     return this.httpClient.get(endpoint)
       .pipe(
@@ -41,7 +41,7 @@ export class ApiServiceService {
   }
 
   getS3Url(key: string): Observable<string> {
-    const endpoint = this.endpointangel + 'key/' + key;
+    const endpoint = this.enpointgateway + 'key/' + key;
 
     return this.httpClient.get(endpoint)
       .pipe(
@@ -52,7 +52,7 @@ export class ApiServiceService {
   }
 
   getCountCelebrities(): Observable<CounterCelebrities> {
-    const endpoint = this.endpointangel + 'countCelebrities';
+    const endpoint = this.enpointgateway + 'countCelebrities';
 
     return this.httpClient.get(endpoint)
     .pipe(
