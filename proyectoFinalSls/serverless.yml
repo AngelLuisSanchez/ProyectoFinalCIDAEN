@@ -24,13 +24,12 @@ provider:
   apiKeys:
     - ${opt:nameKeySecret}
   usagePlan:
-  quota:
-    limit: 50
-    offset: 2
-    period: DAY
-  throttle:
-    burstLimit: 5
-    rateLimit: 5
+    quota:
+      limit: 50
+      period: DAY
+    throttle:
+      burstLimit: 5
+      rateLimit: 5
   runtime: python3.6
   stage: dev
   region: eu-west-1
