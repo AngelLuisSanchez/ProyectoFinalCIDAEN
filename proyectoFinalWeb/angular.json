@@ -66,8 +66,11 @@
                         "browserTarget": "proyectoFinalWeb:build"
                     },
                     "configurations": {
-                        "production": {
-                            "browserTarget": "proyectoFinalWeb:build:production"
+                        "dev-alberto": {
+                            "browserTarget": "proyectoFinalWeb:build:dev-alberto"
+                        },
+                        "dev-angel": {
+                            "browserTarget": "proyectoFinalWeb:build:dev-angel"
                         }
                     }
                 },

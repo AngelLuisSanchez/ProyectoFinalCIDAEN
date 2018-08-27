@@ -21,6 +21,16 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+    - ${opt:nameKeySecret}
+  usagePlan:
+  quota:
+    limit: 50
+    offset: 2
+    period: DAY
+  throttle:
+    burstLimit: 5
+    rateLimit: 5
   runtime: python3.6
   stage: dev
   region: eu-west-1
@@ -61,6 +71,7 @@ functions:
           path: cloudtags
           method: get
           cors: true
+          private: true
   
   list-celebrities:
     handler: handlers/handler.list_celebrities
@@ -69,6 +80,7 @@ functions:
           path: celebrities/{date}
           method: get
           cors: true
+          private: true
   
   count-celebrities:
     handler: handlers/handler.countCelebritiesByNewspaper
@@ -77,6 +89,7 @@ functions:
           path: countCelebrities
           method: get
           cors: true
+          private: true
 
   s3-get-url:
     handler: handlers/handler.s3_get_url
@@ -85,6 +98,7 @@ functions:
           path: key/{key}
           method: get
           cors: true
+          private: true
     
   download-images:
     handler: handlers/handler.download_images
