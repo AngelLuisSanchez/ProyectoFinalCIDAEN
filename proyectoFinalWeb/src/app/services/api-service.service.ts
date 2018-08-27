@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Celebrities } from '../interfaces/celebrities';
+import { HttpClient } from '@angular/common/http';
+import { CounterCelebrities } from '../interfaces/counter-celebrities';
+import { map } from 'rxjs/operators';
+import { CloudTags } from '../interfaces/cloud-tags';
 import { Http } from '@angular/http';
-import { Observable } from '../../../node_modules/rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,33 +14,60 @@ import { Observable } from '../../../node_modules/rxjs';
 
 export class ApiServiceService {
 
-  endpointangel = 'XXXXXXXXX';
-  endpointalberto = 'XXXXXXXX';
+  enpointgateway = environment.ENDPOINT;
 
-  constructor(private http: Http) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getCelebrities(date: string): Observable<any> {
-    const url = this.endpointangel + 'celebrities/' + date;
+  getCelebrities(date: string): Observable <Celebrities> {
+    const endpoint = this.enpointgateway + 'celebrities/' + date;
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint, {
+      headers: {'x-api-key': environment.APIKEY}
+    })
+      .pipe(
+        map((celebrities: any) => {
+          return <Celebrities> celebrities.celebrities;
+        })
+      );
   }
 
-  getCloudTags(): Observable<any> {
-    const url = this.endpointangel + 'cloudtags';
+  getCloudTags(): Observable<CloudTags> {
+    const endpoint = this.enpointgateway + 'cloudtags';
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint, {
+      headers: {'x-api-key': environment.APIKEY}
+    })
+      .pipe(
+        map((cloudTags: any) => {
+          return <CloudTags> cloudTags.cloudTags;
+        })
+      );
   }
 
-  getS3Url(key: string): Observable<any> {
-    const url = this.endpointangel + 'key/' + key;
+  getS3Url(key: string): Observable<string> {
+    const endpoint = this.enpointgateway + 'key/' + key;
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint, {
+      headers: {'x-api-key': environment.APIKEY}
+    })
+      .pipe(
+        map((url: any) => {
+          return <string> url.url;
+        })
+      );
   }
 
-  getCountCelebrities(): Observable<any> {
-    const url = this.endpointangel + 'countCelebrities'
+  getCountCelebrities(): Observable<CounterCelebrities> {
+    const endpoint = this.enpointgateway + 'countCelebrities';
 
-    return this.http.get(url);
+    return this.httpClient.get(endpoint, {
+      headers: {'x-api-key': environment.APIKEY}
+    })
+    .pipe(
+      map((counterCelebrities: any) => {
+        return <CounterCelebrities>counterCelebrities.counterCelebrities;
+      })
+    );
   }
 
 }

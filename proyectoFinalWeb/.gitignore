@@ -8,6 +8,9 @@
 # dependencies
 /node_modules
 
+/src/environments/environment.dev-alberto.ts
+/src/environments/environment.dev-angel.ts
+
 # IDEs and editors
 /.idea
 .project

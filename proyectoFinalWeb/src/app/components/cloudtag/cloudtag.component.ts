@@ -23,17 +23,16 @@ export class CloudtagComponent implements OnInit {
     delay: 0.8
   };
 
-  elpais: CloudData[];
-  elmundo: CloudData[];
-  abc: CloudData[];
-  diarioes: CloudData[];
+  elpais: CloudData[] = [];
+  elmundo: CloudData[] = [];
+  abc: CloudData[] = [];
+  diarioes: CloudData[] = [];
 
   constructor(private _apiService: ApiServiceService) { }
 
   ngOnInit(): void {
     this._apiService.getCloudTags().subscribe(
       resp => {
-        resp = resp.json()['datos'];
         this.elpais = resp[0]['elpais'];
         this.diarioes = resp[1]['diarioes'];
         this.elmundo = resp[2]['elmundo'];

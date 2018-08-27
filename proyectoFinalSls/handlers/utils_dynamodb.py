@@ -7,6 +7,7 @@ from boto3.dynamodb.types import DYNAMODB_CONTEXT
 from boto3.dynamodb.conditions import Key, Attr
 import decimal
 from handlers import utils
+from classes import CounterCelebrities
 
 # Inhibit Inexact Exceptions
 DYNAMODB_CONTEXT.traps[decimal.Inexact] = 0
@@ -28,15 +29,18 @@ def create_item(labels_object, labels_celebrities, newspaper, idimage):
     table.put_item(Item=item)
 
 def get_cloud_tags_newspaper(newspaper):
-    response = table.query(   
+    items = table.query(   
         KeyConditionExpression=Key('daymonthYear').eq(utils.get_current_date()) & Key('idimagen').begins_with(newspaper)
     )['Items']
-    response = utils.parse_data_query(response)
-    return response
+    wordCloudList = utils.parse_data_cloud_tag(items)
+
+    wordCloud = [cloudTag.serialize() for cloudTag in wordCloudList]
+
+    return wordCloud
 
 def getCelebrities(paramDate):
     items = table.query(KeyConditionExpression=Key('daymonthYear').eq(utils.parse_date(paramDate)))['Items']
-    celebrities = utils.parse_list_celebrities(items)
+    listCelebrities = utils.parse_list_celebrities(items)
 
     abcItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
         utils.parse_date(paramDate)) & Key('idimagen').begins_with('abc'))['Items']
@@ -47,16 +51,18 @@ def getCelebrities(paramDate):
     elpaisItemsByDate = table.query(KeyConditionExpression=Key('daymonthYear').eq(
         utils.parse_date(paramDate)) & Key('idimagen').begins_with('elpais'))['Items']
 
-    countsByDate = {
-        'abc': utils.countCelebrities(abcItemsByDate),
-        'elmundo': utils.countCelebrities(elmundoItemsByDate),
-        'diarioes': utils.countCelebrities(diarioesItemsByDate),
-        'elpais': utils.countCelebrities(elpaisItemsByDate)
-    }
+    counterCelebrities = CounterCelebrities.CounterCelebrities(
+        utils.countCelebrities(abcItemsByDate),
+        utils.countCelebrities(elmundoItemsByDate),
+        utils.countCelebrities(elpaisItemsByDate),
+        utils.countCelebrities(diarioesItemsByDate)
+    )
+
+    celebrities = [celebrity.serialize() for celebrity in listCelebrities]
 
     obj = {
-        'celebrities': celebrities,
-        'countsByDate': countsByDate
+        'listCelebrities': celebrities,
+        'counterCelebrities': counterCelebrities.__dict__
     }
 
     return obj
@@ -67,11 +73,11 @@ def getCountCelebritiesByNewspaper():
     diarioesItems = table.scan(FilterExpression=Key('idimagen').begins_with('diarioes'))['Items']
     elpaisItems = table.scan(FilterExpression=Key('idimagen').begins_with('elpais'))['Items']
 
-    counts = {
-        'abc': utils.countCelebrities(abcItems),
-        'elmundo': utils.countCelebrities(elmundoItems),
-        'diarioes': utils.countCelebrities(diarioesItems),
-        'elpais': utils.countCelebrities(elpaisItems)
-    }
+    counterCelebrities = CounterCelebrities.CounterCelebrities(
+        utils.countCelebrities(abcItems),
+        utils.countCelebrities(elmundoItems),
+        utils.countCelebrities(elpaisItems),
+        utils.countCelebrities(diarioesItems)
+    )
 
-    return counts
+    return counterCelebrities

@@ -2,12 +2,14 @@ service: cidaen-proyectofinal-back
 
 plugins:
   - serverless-ephemeral
+  - serverless-pseudo-parameters
 
 package:
   exclude:
     - ./**
   include:
     - handlers/**
+    - classes/**
 
 custom:
   ephemeral:
@@ -19,6 +21,16 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+    - ${opt:nameKeySecret}
+  usagePlan:
+  quota:
+    limit: 50
+    offset: 2
+    period: DAY
+  throttle:
+    burstLimit: 5
+    rateLimit: 5
   runtime: python3.6
   stage: dev
   region: eu-west-1
@@ -26,8 +38,8 @@ provider:
   timeout: 300
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.angelalberto3.com
-    DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
+    S3_BUCKET: inputimages-${self:provider.stage}.#{AWS::AccountId}
+    DYNAMODB_TABLE: ProcessedImages-${self:provider.stage}.#{AWS::AccountId}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -59,6 +71,7 @@ functions:
           path: cloudtags
           method: get
           cors: true
+          private: true
   
   list-celebrities:
     handler: handlers/handler.list_celebrities
@@ -67,6 +80,7 @@ functions:
           path: celebrities/{date}
           method: get
           cors: true
+          private: true
   
   count-celebrities:
     handler: handlers/handler.countCelebritiesByNewspaper
@@ -75,6 +89,7 @@ functions:
           path: countCelebrities
           method: get
           cors: true
+          private: true
 
   s3-get-url:
     handler: handlers/handler.s3_get_url
@@ -83,50 +98,19 @@ functions:
           path: key/{key}
           method: get
           cors: true
+          private: true
     
-  download-images-elpais:
-    handler: handlers/handler.download_images_elpais
+  download-images:
+    handler: handlers/handler.download_images
     events:
       - schedule: cron(00 06 * * ? *)
-
-  download-images-elmundo:
-    handler: handlers/handler.download_images_elmundo
-    events:
-      - schedule: cron(05 06 * * ? *)
-
-  download-images-abc:
-    handler: handlers/handler.download_images_abc
-    events:
-      - schedule: cron(10 06 * * ? *)
-
-  download-images-diarioes:
-    handler: handlers/handler.download_images_diarioes
-    events:
-      - schedule: cron(15 06 * * ? *)
 
   s3-new-image:
     handler: handlers/handler.image_uploaded
     events:
-      - s3:
+     - s3:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
-          rules:
-            - prefix: elpais/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: elmundo/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: abc/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: diarioes/
 
 resources:
   Resources:
