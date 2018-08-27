@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { CounterCelebrities } from '../interfaces/counter-celebrities';
 import { map } from 'rxjs/operators';
 import { CloudTags } from '../interfaces/cloud-tags';
+import { Http } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { CloudTags } from '../interfaces/cloud-tags';
 
 export class ApiServiceService {
 
-  endpointangel = 'XXXXXXXXXX';
+  endpointangel = 'https://u6t1l31gul.execute-api.eu-west-1.amazonaws.com/dev/';
   endpointalberto = 'XXXXXXXX';
 
   constructor(private httpClient: HttpClient) { }
@@ -22,18 +23,18 @@ export class ApiServiceService {
 
     return this.httpClient.get(endpoint)
       .pipe(
-        map(celebrities => {
+        map((celebrities: any) => {
           return <Celebrities> celebrities.celebrities;
         })
       );
   }
 
-  getCloudTags(): Observable<any> {
+  getCloudTags(): Observable<CloudTags> {
     const endpoint = this.endpointangel + 'cloudtags';
 
     return this.httpClient.get(endpoint)
       .pipe(
-        map(cloudTags => {
+        map((cloudTags: any) => {
           return <CloudTags> cloudTags.cloudTags;
         })
       );
@@ -44,7 +45,7 @@ export class ApiServiceService {
 
     return this.httpClient.get(endpoint)
       .pipe(
-        map(url => {
+        map((url: any) => {
           return <string> url.url;
         })
       );
@@ -55,7 +56,7 @@ export class ApiServiceService {
 
     return this.httpClient.get(endpoint)
     .pipe(
-      map(counterCelebrities => {
+      map((counterCelebrities: any) => {
         return <CounterCelebrities>counterCelebrities.counterCelebrities;
       })
     );

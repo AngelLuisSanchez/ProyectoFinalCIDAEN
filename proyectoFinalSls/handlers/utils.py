@@ -105,8 +105,8 @@ def parse_list_celebrities(items):
             for celebrity in item['CelebrityFaces']:
                 celebrities.append(
                     Celebrities.Celebrities(
-                        celebrity['Name'],
                         celebrity['Id'],
+                        celebrity['Name'],
                         celebrity['Url'],
                         idImagen
                     )
