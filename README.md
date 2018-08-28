@@ -1,4 +1,4 @@
-# ProyectoFinalCIDAEN
+# CIDAEN - Serverless Framework - AWS
 This project is part of the [CIDAEN course](http://www.cidaen.es/) and has been developed on the Amazon Web Services (AWS) platform through the [Serverless Framework](https://serverless.com/).
 
 The main objective of this project is the use of AWS API Rekognition for the recognition of celebrities who appear in different Spanish newspapers. DynamoDB and S3 are used as storage systems and AWS Lambda is used as serverless media.
