@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>El País</th>
+                        <th>El Mundo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <angular-tag-cloud [data]="elpais" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                        <td>
+                            <angular-tag-cloud [data]="elmundo" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Diario.es</th>
+                        <th>ABC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <angular-tag-cloud [data]="diarioes" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                        <td>
+                            <angular-tag-cloud [data]="abc" [width]="options.width" [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="zoomOnHoverOptions">
+                            </angular-tag-cloud>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

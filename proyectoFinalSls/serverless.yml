@@ -2,12 +2,14 @@ service: cidaen-proyectofinal-back
 
 plugins:
   - serverless-ephemeral
+  - serverless-pseudo-parameters
 
 package:
   exclude:
     - ./**
   include:
     - handlers/**
+    - classes/**
 
 custom:
   ephemeral:
@@ -19,6 +21,15 @@ custom:
 
 provider:
   name: aws
+  apiKeys:
+    - ${opt:nameKeySecret}
+  usagePlan:
+    quota:
+      limit: 50
+      period: DAY
+    throttle:
+      burstLimit: 5
+      rateLimit: 5
   runtime: python3.6
   stage: dev
   region: eu-west-1
@@ -26,11 +37,10 @@ provider:
   timeout: 300
 
   environment:
-    S3_BUCKET: cidaen-proyectofinal-files-${self:provider.stage}.albertoangel2.com
-    DYNAMODB_TABLE: ProyectoFinalAnalisisImagenes-${self:provider.stage}
+    S3_BUCKET: inputimages-${self:provider.stage}.#{AWS::AccountId}
+    DYNAMODB_TABLE: ProcessedImages-${self:provider.stage}.#{AWS::AccountId}
 
   iamRoleStatements:
-    #Ajustar un poco, pero funciona
     - Effect: 'Allow'
       Action: 
         - 'rekognition:*'
@@ -53,44 +63,59 @@ provider:
 
 functions:
 
-  download-images-elpais:
-    handler: handlers/handler.descargar_imagenes_elpais
+  cloud-tags:
+    handler: handlers/handler.get_cloud_tags
     events:
-      - schedule: cron(49 17 * * ? *)
+      - http:
+          path: cloudtags
+          method: get
+          cors: true
+          private: true
+  
+  list-celebrities:
+    handler: handlers/handler.list_celebrities
+    events:
+      - http:
+          path: celebrities/{date}
+          method: get
+          cors: true
+          private: true
+  
+  count-celebrities:
+    handler: handlers/handler.countCelebritiesByNewspaper
+    events:
+      - http:
+          path: countCelebrities
+          method: get
+          cors: true
+          private: true
+
+  s3-get-url:
+    handler: handlers/handler.s3_get_url
+    events:
+      - http:
+          path: key/{key}
+          method: get
+          cors: true
+          private: true
+    
+  download-images:
+    handler: handlers/handler.download_images
+    events:
+      - schedule: cron(00 06 * * ? *)
 
   s3-new-image:
     handler: handlers/handler.image_uploaded
     events:
-      - s3:
+     - s3:
           bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
-          rules:
-            - prefix: input_images/
-      - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
-          event: s3:ObjectCreated:*
-          rules:
-            - prefix: elpais/
-
-  s3-url:
-    handler: handlers/handler.s3_url
-    events:
-      - http:
-          path: celebrity/{id_celebrity}
-          method: get
-  
-  dynamodb-celebrities:
-    handler: handlers/handler.dynamodb_celebrities
-    events:
-      - http:
-          path: celebrities
-          method: get
 
 resources:
   Resources:
     TodosDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Delete
+      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -

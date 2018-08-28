@@ -6,27 +6,35 @@ import uuid
 import os
 import shutil
 
-
-#Funcion para descargar las imagenes de el periodico el pais
-def images_el_pais():
-
-    page = requests.get('https://elpais.com/')
+def download_images_covers_newspaper(newspaper, url_newspaper):    
+    page = requests.get(url_newspaper)
     soup = BeautifulSoup(page.content, 'lxml')
     
     imgs = soup.find_all('img')
-    rutas = []
+    routes = []
     for img in imgs:
-        url = img.get_attribute_list('data-src')[0]
-        if(url != None):
-            rutas.append('https:'+str(url))
-            
+        if(newspaper == 'elpais' or newspaper == 'abc'):
+            url = img.get_attribute_list('data-src')[0]
+            if(url != None):
+                routes.append('https:'+str(url))
+        elif(newspaper == 'elmundo'):
+            url = img.get_attribute_list('src')[0]
+            if(url != None and 'e00-elmundo.uecdn.es' in url):
+                routes.append(url)
+        elif(newspaper == 'diarioes'):
+            url = img.get_attribute_list('src')[0]
+            if(url != None and 'jpg' in url):
+                routes.append(url_newspaper + url)
+        else:
+            print('newspaper not found', newspaper)
+    
     try:
-        shutil.rmtree('/tmp/elpais', ignore_errors=True)
+        shutil.rmtree('/tmp/' + newspaper, ignore_errors=True)
     except:
-        print('Error al borrar el directorio')
+        print('Error delete directory', newspaper)
         
-    os.mkdir('/tmp/elpais')
+    os.mkdir('/tmp/' + newspaper)
     
     for i in range(5):
-        extension = rutas[i].split('/')[-1].split('.')[-1]
-        urllib.request.urlretrieve(rutas[i], '/tmp/elpais/' + str(uuid.uuid4()) + '.' + extension)
+        extension = routes[i].split('/')[-1].split('.')[-1]
+        urllib.request.urlretrieve(routes[i], '/tmp/'+ newspaper + '/' + str(uuid.uuid4()) + '.' + extension)
