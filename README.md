@@ -152,4 +152,4 @@ resources:
 To deploy the application, you need to have an AWS account and configure the Serverless Framework. We left a [quickStart](https://serverless.com/framework/docs/providers/aws/guide/quick-start/) for the process.
 `serverless deploy -v --nameKeySecret keyName`
 or
-`sls deploy -v --nameKeySecret nombredelaclave`
+`sls deploy -v --nameKeySecret keyName`
