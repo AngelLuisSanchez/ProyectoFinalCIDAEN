@@ -5,7 +5,9 @@ The main objective of this project is the use of AWS API Rekognition for the rec
 
 The visual part of the application has been developed with Angular 6, the [Chart.js framework](http://www.chartjs.org/) and the [Tag Cloud module](https://github.com/zeeshanhyder/angular-tag-cloud).
 
-The application is deployed in a [S3 bucket](http://cidaen-proyectofinal-albertoangel.com.s3-website-eu-west-1.amazonaws.com), which acts as hosting.
+The application is deployed in a [S3 bucket](http://cidaen-proyectofinal-albertoangel.com.s3-website-eu-west-1.amazonaws.com), which acts as hosting. The project has been based on the architecture of the image.
+
+![Architecture](https://github.com/AngelLuisSanchez/ProyectoFinalCIDAEN/blob/developer/proyectoFinalWeb/src/assets/img/cloudcraft.png)
 
 ## Requirements
 
@@ -28,7 +30,7 @@ It has been used for displaying graphs. To install it, run: `npm install chart.j
 It has been used to visualize word clouds. To install it, run: `npm install angular-tag-cloud`
 
 ## Serverless.yaml
-Include plugins and include/exclude files to upload to AWS. Next, the docker image is used to install the libraries that are necessary for the process of extracting the images from the newspaper covers. These bookstores are:
+Include plugins and include/exclude files to upload to AWS. Next, the docker image is used to install the libraries that are necessary for the process of extracting the images from the newspaper covers. These libraries are:
 * requests
 * beautifulsoup4
 * lxml
